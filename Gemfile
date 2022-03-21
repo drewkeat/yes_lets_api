@@ -43,6 +43,11 @@ gem "jwt", "~> 2.3"
 
 gem "jsonapi-serializer", "~> 2.2"
 
+#For creating seed data
 gem "faker", "~> 2.20"
-
 gem "humanize", "~> 2.5"
+
+#OmniAuth
+gem 'omniauth'
+gem 'omniauth-google-oauth2'
+gem 'omniauth-rails_csrf_protection'
