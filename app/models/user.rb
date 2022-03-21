@@ -5,7 +5,7 @@ class User < ApplicationRecord
   has_many :confirmed_friendships, -> {where(confirmed: true)}, class_name: "Friendship"
   has_many :pending_friends, through: :pending_friendships, source: :friend
   has_many :friends, through: :friendships, source: :friend
-  before_save :normalize_names
+  before_save :normalize_attributes
 
   def full_name
     self.first + " " + self.last
@@ -23,8 +23,10 @@ class User < ApplicationRecord
   end
   private
 
-  def normalize_names
+  def normalize_attributes
     self.first = self.first.downcase.capitalize
     self.last = self.last.downcase.capitalize
+    self.email = self.email.downcase
+    #TODO: normalize phone number
   end
 end
