@@ -6,6 +6,7 @@ class User < ApplicationRecord
   has_many :pending_friends, through: :pending_friendships, source: :friend
   has_many :friends, through: :friendships, source: :friend
   has_many :availabilities
+  has_and_belongs_to_many :hangtimes
   before_save :normalize_attributes
 
   def full_name
