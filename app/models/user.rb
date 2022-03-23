@@ -7,6 +7,7 @@ class User < ApplicationRecord
   has_many :friends, through: :friendships, source: :friend
   has_many :availabilities
   has_and_belongs_to_many :hangtimes
+  has_secure_password
   before_save :normalize_attributes
 
   def full_name
