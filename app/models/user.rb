@@ -19,11 +19,25 @@ class User < ApplicationRecord
     self.save
   end
 
-  def confirm_friend(friendship)
+  def confirm_friend(friend)
+    friendship = self.friend_invites.where(user_id: friend.id)
     friendship.update(confirmed: true)
-    self.friendships.build(friend_id: friendship.user_id, confirmed: true)
+    self.friendships.build(friend_id: friend.id, confirmed: true)
     self.save
   end
+
+  def options_with(friend)
+    times = self.availabilities.map do |availability|
+      [availability.id, friend.availabilities.matches(availability).map(&:id)]
+    end
+    times = times.to_h
+    times.select{|k,v| !v.empty?}
+  end
+
+  def possible_hangtimes
+    self.friends.map{|friend| hang_with(friend)}
+  end
+
   private
 
   def normalize_attributes

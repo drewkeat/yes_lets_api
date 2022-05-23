@@ -20,4 +20,32 @@ def create_availability(user)
   user.availabilities.build(start: Time.now)
 end
 
-3.times create_user
+3.times{create_user}
+
+u1 = User.first; u2 =  User.find(2); u3 = User.last
+
+u1.friend(u2)
+u2.friend(u3)
+u3.friend(u1)
+
+def create_availability(user)
+  future = (rand.round == 1)
+  if future
+    start_day = (Time.now + rand(1..10).days).noon
+    later = (rand.round == 1)
+    later ? start_time = start_day + rand(1..5).hours : start_time = start_day - rand(1..5).hours
+  else 
+    start_day = (Time.now - rand(1..10).days).noon
+    later = (rand.round == 1)
+    later ? start_time = start_day + rand(1..5).hours : start_time = start_day - rand(1..5).hours
+  end
+  end_time = start_time + rand(1..4).hours
+  user.availabilities.build(start: start_time, end: end_time)
+  user.save
+end
+
+User.all.each do |user|
+  15.times{create_availability(user)}
+end
+
+
