@@ -4,7 +4,7 @@ class User < ApplicationRecord
   has_many :friend_invites, -> {where(confirmed: nil)}, class_name: "Friendship", foreign_key: :friend
   has_many :confirmed_friendships, -> {where(confirmed: true)}, class_name: "Friendship"
   has_many :pending_friends, through: :pending_friendships, source: :friend
-  has_many :friends, through: :friendships, source: :friend
+  has_many :friends, through: :confirmed_friendships, source: :friend
   has_many :availabilities
   has_and_belongs_to_many :hangtimes
   has_secure_password

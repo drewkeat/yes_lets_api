@@ -10,7 +10,7 @@ class UsersController < ApplicationController
 
   # GET /users/1
   def show
-    render json: @user
+    render json: UserSerializer.new(@user)
   end
 
   # POST /users
@@ -18,7 +18,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
-      render json: @user, status: :created, location: @user
+      render json: UserSerializer.new(@user), status: :created, location: @user
     else
       render json: @user.errors, status: :unprocessable_entity
     end

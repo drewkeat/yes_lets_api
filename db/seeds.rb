@@ -19,3 +19,5 @@ end
 def create_availability(user)
   user.availabilities.build(start: Time.now)
 end
+
+3.times create_user
