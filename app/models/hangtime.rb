@@ -10,3 +10,12 @@ class Hangtime < ApplicationRecord
     {start: start_time, end: end_time}
   end
 end
+
+
+def generate_random_hangtime(user)
+  availability_user1 = user.possible_hangtimes.map(&:keys).flatten.sample
+  availability_user2 = user.possible_hangtimes.select{|friend_hash| friend_hash.keys.include?(availability_user1)}.sample[availability_user1].sample
+  hangtime = Hangtime.create(Hangtime.match_up(availability_user1, availability_user2))
+  user.hangtimes.push << hangtime
+  Availability.find(availability_user2).user.hangtimes.push << hangtime
+end

@@ -25,8 +25,10 @@ end
 u1 = User.first; u2 =  User.find(2); u3 = User.last
 
 u1.friend(u2)
+u2.confirm_friend(u1)
 u2.friend(u3)
 u3.friend(u1)
+u1.confirm_friend(u3)
 
 def create_availability(user)
   future = (rand.round == 1)
@@ -48,4 +50,14 @@ User.all.each do |user|
   15.times{create_availability(user)}
 end
 
+def generate_random_hangtime(user)
+  availability_user1 = user.possible_hangtimes.map(&:keys).flatten.sample
+  availability_user2 = user.possible_hangtimes.select{|friend_hash| friend_hash.keys.include?(availability_user1)}.sample[availability_user1].sample
+  hangtime = Hangtime.create(Hangtime.match_up(availability_user1, availability_user2))
+  user.hangtimes.push << hangtime
+  Availability.find(availability_user2).user.hangtimes.push << hangtime
+end
 
+User.all.each do |user|
+  generate_random_hangtime(user)
+end

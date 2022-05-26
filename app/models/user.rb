@@ -35,7 +35,7 @@ class User < ApplicationRecord
   end
 
   def possible_hangtimes
-    self.friends.map{|friend| hang_with(friend)}
+    self.friends.map{|friend| options_with(friend)}
   end
 
   private
