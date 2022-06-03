@@ -9,6 +9,7 @@ class User < ApplicationRecord
   has_and_belongs_to_many :hangtimes
   has_secure_password
   before_save :normalize_attributes
+  validates_presence_of :email, on: :create, message: "can't be blank"
 
   def full_name
     self.first + " " + self.last

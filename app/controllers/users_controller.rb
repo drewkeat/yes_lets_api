@@ -20,7 +20,7 @@ class UsersController < ApplicationController
     if @user.save
       render json: UserSerializer.new(@user), status: :created, location: @user
     else
-      render json: @user.errors, status: :unprocessable_entity
+      render json: {message: @user.errors.full_messages}, status: :unprocessable_entity
     end
   end
 
