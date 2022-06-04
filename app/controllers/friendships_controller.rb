@@ -10,7 +10,7 @@ class FriendshipsController < ApplicationController
 
   # GET /friendships/1
   def show
-    render json: @friendship
+    render json: FriendshipSerializer.new(@friendship)
   end
 
   # POST /friendships
@@ -18,9 +18,9 @@ class FriendshipsController < ApplicationController
     @friendship = Friendship.new(friendship_params)
 
     if @friendship.save
-      render json: @friendship, status: :created, location: @friendship
+      render json: FriendshipSerializer.new(@friendship), status: :created, location: @friendship
     else
-      render json: @friendship.errors, status: :unprocessable_entity
+      render json: {message: @friendship.errors.full_messages}, status: :unprocessable_entity
     end
   end
 

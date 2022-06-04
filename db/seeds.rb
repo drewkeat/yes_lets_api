@@ -6,10 +6,10 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-def create_user
+def create_user(num)
   attributes = {
-    first: Faker::Name.first_name,
-    last: Faker::Name.last_name,
+    first: "user",
+    last: num.humanize,
     password: "pass"
   }
   attributes[:email] = attributes[:first] + "_" + attributes[:last] + "@email.com"
@@ -20,7 +20,7 @@ def create_availability(user)
   user.availabilities.build(start: Time.now)
 end
 
-3.times{create_user}
+3.times{|i| create_user(i)}
 
 u1 = User.first; u2 =  User.find(2); u3 = User.last
 
