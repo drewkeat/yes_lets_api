@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   def index
     @users = User.all
 
-    render json: @users
+    render json: UserSerializer.new(@users)
   end
 
   # GET /users/1
@@ -20,7 +20,7 @@ class UsersController < ApplicationController
     if @user.save
       render json: UserSerializer.new(@user), status: :created, location: @user
     else
-      render json: {message: @user.errors.full_messages}, status: :unprocessable_entity
+      render json: @user.errors, status: :unprocessable_entity
     end
   end
 

@@ -5,12 +5,12 @@ class HangtimesController < ApplicationController
   def index
     @hangtimes = Hangtime.all
 
-    render json: @hangtimes
+    render json: HangtimeSerializer.new(@hangtimes)
   end
 
   # GET /hangtimes/1
   def show
-    render json: @hangtime
+    render json: HangtimeSerializer.new(@hangtime)
   end
 
   # POST /hangtimes
@@ -18,7 +18,7 @@ class HangtimesController < ApplicationController
     @hangtime = Hangtime.new(hangtime_params)
 
     if @hangtime.save
-      render json: @hangtime, status: :created, location: @hangtime
+      render json: HangtimeSerializer.new(@hangtime), status: :created, location: @hangtime
     else
       render json: @hangtime.errors, status: :unprocessable_entity
     end
@@ -27,7 +27,7 @@ class HangtimesController < ApplicationController
   # PATCH/PUT /hangtimes/1
   def update
     if @hangtime.update(hangtime_params)
-      render json: @hangtime
+      render json: HangtimeSerializer.new(@hangtime)
     else
       render json: @hangtime.errors, status: :unprocessable_entity
     end

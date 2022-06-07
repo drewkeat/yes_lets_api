@@ -8,8 +8,8 @@
 
 def create_user(num)
   attributes = {
-    first: "user",
-    last: num.humanize,
+    first: "dummy",
+    last: (num + 1).humanize,
     password: "pass"
   }
   attributes[:email] = attributes[:first] + "_" + attributes[:last] + "@email.com"
