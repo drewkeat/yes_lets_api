@@ -5,12 +5,12 @@ class FriendshipsController < ApplicationController
   def index
     @friendships = Friendship.all
 
-    render json: @friendships
+    render json: FriendshipSerializer.new(@friendships)
   end
 
   # GET /friendships/1
   def show
-    render json: @friendship
+    render json: FriendshipSerializer.new(@friendship)
   end
 
   # POST /friendships
@@ -18,7 +18,7 @@ class FriendshipsController < ApplicationController
     @friendship = Friendship.new(friendship_params)
 
     if @friendship.save
-      render json: @friendship, status: :created, location: @friendship
+      render json: FriendshipSerializer.new(@friendship), status: :created, location: @friendship
     else
       render json: @friendship.errors, status: :unprocessable_entity
     end
@@ -27,7 +27,7 @@ class FriendshipsController < ApplicationController
   # PATCH/PUT /friendships/1
   def update
     if @friendship.update(friendship_params)
-      render json: @friendship
+      render json: FriendshipSerializer.new(@friendship)
     else
       render json: @friendship.errors, status: :unprocessable_entity
     end

@@ -5,12 +5,12 @@ class AvailabilitiesController < ApplicationController
   def index
     @availabilities = Availability.all
 
-    render json: @availabilities
+    render json: AvailabilitySerializer.new(@availabilities)
   end
 
   # GET /availabilities/1
   def show
-    render json: @availability
+    render json: AvailabilitySerializer.new(@availability)
   end
 
   # POST /availabilities
@@ -18,7 +18,7 @@ class AvailabilitiesController < ApplicationController
     @availability = Availability.new(availability_params)
 
     if @availability.save
-      render json: @availability, status: :created, location: @availability
+      render json: AvailabilitySerializer.new(@availability), status: :created, location: @availability
     else
       render json: @availability.errors, status: :unprocessable_entity
     end
@@ -27,7 +27,7 @@ class AvailabilitiesController < ApplicationController
   # PATCH/PUT /availabilities/1
   def update
     if @availability.update(availability_params)
-      render json: @availability
+      render json: AvailabilitySerializer.new(@availabilities)
     else
       render json: @availability.errors, status: :unprocessable_entity
     end
