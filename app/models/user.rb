@@ -1,9 +1,10 @@
 class User < ApplicationRecord
   has_many :friendships
   has_many :pending_friendships, -> {where(confirmed: nil)}, class_name: "Friendship"
-  has_many :friend_invites, -> {where(confirmed: nil)}, class_name: "Friendship", foreign_key: :friend
+  has_many :friendship_invites, -> {where(confirmed: nil)}, class_name: "Friendship", foreign_key: :friend
   has_many :confirmed_friendships, -> {where(confirmed: true)}, class_name: "Friendship"
   has_many :pending_friends, through: :pending_friendships, source: :friend
+  has_many :friend_invites, through: :friendship_invites, source: :user
   has_many :friends, through: :confirmed_friendships, source: :friend
   has_many :availabilities
   has_and_belongs_to_many :hangtimes
@@ -21,7 +22,7 @@ class User < ApplicationRecord
   end
 
   def confirm_friend(friend)
-    friendship = self.friend_invites.where(user_id: friend.id)
+    friendship = self.friendship_invites.where(user_id: friend.id)
     friendship.update(confirmed: true)
     self.friendships.build(friend_id: friend.id, confirmed: true)
     self.save
