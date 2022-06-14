@@ -1,7 +1,7 @@
 class AuthController < ApplicationController
   def create
     @user = User.find_by(email: auth_params[:email])
-    if @user.authenticate(auth_params[:password])
+    if @user && @user.authenticate(auth_params[:password])
       render json: UserSerializer.new(@user), status: :accepted, location: @user
     else
       render json: {message: "Unable to verify account"}, status: 401
