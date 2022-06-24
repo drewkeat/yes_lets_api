@@ -11,6 +11,7 @@ class User < ApplicationRecord
   has_secure_password
   before_save :normalize_attributes
   validates_presence_of :email, on: :create, message: "can't be blank"
+  scope :findBySubstring, ->(substring) {where("first like ? OR last like ?", "%#{substring}%", "%#{substring}%")}
 
   def full_name
     self.first + " " + self.last

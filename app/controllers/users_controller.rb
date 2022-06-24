@@ -8,6 +8,12 @@ class UsersController < ApplicationController
     render json: UserSerializer.new(@users)
   end
 
+  def search
+    @users = User.findBySubstring(user_params[:query])
+
+    render json: UserSerializer.new(@users)
+  end
+
   # GET /users/1
   def show
     render json: UserSerializer.new(@user)
@@ -46,6 +52,6 @@ class UsersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.require(:user).permit(:first, :last, :email, :password, :password_confirmation, :phone_number, :avatar)
+      params.require(:user).permit(:first, :last, :email, :password, :password_confirmation, :phone_number, :query, :avatar)
     end
 end
