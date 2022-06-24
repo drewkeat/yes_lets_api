@@ -10,7 +10,7 @@ class UsersController < ApplicationController
 
   def search
     @users = User.findBySubstring(user_params[:query])
-
+    
     render json: UserSerializer.new(@users)
   end
 
