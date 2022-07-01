@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_22_075051) do
+ActiveRecord::Schema.define(version: 2022_07_01_035017) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,14 +25,18 @@ ActiveRecord::Schema.define(version: 2022_03_22_075051) do
   end
 
   create_table "friendships", force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "friend_id"
-    t.boolean "confirmed"
-    t.integer "circle"
+    t.string "status", default: "pending"
+    t.integer "user_id"
+    t.integer "friend_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["friend_id"], name: "index_friendships_on_friend_id"
-    t.index ["user_id"], name: "index_friendships_on_user_id"
+  end
+
+  create_table "friendships_users", id: false, force: :cascade do |t|
+    t.bigint "friendship_id", null: false
+    t.bigint "user_id", null: false
+    t.index ["friendship_id", "user_id"], name: "index_friendships_users_on_friendship_id_and_user_id"
+    t.index ["user_id", "friendship_id"], name: "index_friendships_users_on_user_id_and_friendship_id"
   end
 
   create_table "hangtimes", force: :cascade do |t|
