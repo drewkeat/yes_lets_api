@@ -1,11 +1,10 @@
 class User < ApplicationRecord
-  has_many :friendships
-  has_many :pending_friendships, -> {where(confirmed: nil)}, class_name: "Friendship"
-  has_many :friendship_invites, -> {where(confirmed: nil)}, class_name: "Friendship", foreign_key: :friend
-  has_many :confirmed_friendships, -> {where(confirmed: true)}, class_name: "Friendship"
-  has_many :pending_friends, through: :pending_friendships, source: :friend
-  has_many :friend_invites, through: :friendship_invites, source: :user
-  has_many :friends, through: :confirmed_friendships, source: :friend
+  has_and_belongs_to_many :friendships, ->{where(status: 'confirmed')}
+  has_and_belongs_to_many :pending_friendships, ->{where(status: 'pending')}, class_name:"Friendship"
+  has_and_belongs_to_many :friendship_invites, ->(user) {where(status: 'pending', friend_id: user.id)}, class_name: "Friendship"
+  has_many :friends, ->(user){where('users.id != ?', user.id)}, through: :friendships, source: :users
+  has_many :pending_friends, ->(user){where('users.id != ? AND friend_id != ?', user.id, user.id)}, through: :pending_friendships, source: :users
+  has_many :friend_invites, ->(user){where('users.id != ? AND friend_id = ?', user.id, user.id)}, through: :pending_friendships, source: :users
   has_many :availabilities
   has_and_belongs_to_many :hangtimes
   has_secure_password
@@ -18,15 +17,17 @@ class User < ApplicationRecord
   end
 
   def friend(user)
-    self.friendships.build(friend_id: user.id)
+    friendship = Friendship.create(user_id: self.id, friend_id: user.id)
+    user.friendships << friendship
+    user.save
+    self.friendships << friendship
     self.save
   end
 
   def confirm_friend(friend)
-    friendship = self.friendship_invites.where(user_id: friend.id)
-    friendship.update(confirmed: true)
-    self.friendships.build(friend_id: friend.id, confirmed: true)
-    self.save
+    friendship = self.friendship_invites.select{|user| user.id = friend.id}.first
+    friendship.update(status: "confirmed")
+    friendship.save
   end
 
   def options_with(friend)
