@@ -18,6 +18,12 @@ class FriendshipsController < ApplicationController
     @friendship = Friendship.new(friendship_params)
 
     if @friendship.save
+      @user = User.find(@friendship.user_id)
+      @user.friendships << @friendship
+      @user.save
+      @friend = User.find(@friendship.friend_id)
+      @friend.friendships << @friendship
+      @friend.save
       render json: FriendshipSerializer.new(@friendship), status: :created, location: @friendship
     else
       render json: @friendship.errors, status: :unprocessable_entity
