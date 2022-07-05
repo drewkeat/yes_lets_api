@@ -42,6 +42,7 @@ class FriendshipsController < ApplicationController
   # DELETE /friendships/1
   def destroy
     @friendship.destroy
+    render json: FriendshipSerializer.new(@friendship)
   end
 
   private

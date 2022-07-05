@@ -36,6 +36,7 @@ class HangtimesController < ApplicationController
   # DELETE /hangtimes/1
   def destroy
     @hangtime.destroy
+    render json: HangtimeSerializer.new(@hangtime)
   end
 
   private
