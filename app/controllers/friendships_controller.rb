@@ -18,6 +18,12 @@ class FriendshipsController < ApplicationController
     @friendship = Friendship.new(friendship_params)
 
     if @friendship.save
+      @user = User.find(@friendship.user_id)
+      @user.friendships << @friendship
+      @user.save
+      @friend = User.find(@friendship.friend_id)
+      @friend.friendships << @friendship
+      @friend.save
       render json: FriendshipSerializer.new(@friendship), status: :created, location: @friendship
     else
       render json: @friendship.errors, status: :unprocessable_entity
@@ -36,6 +42,7 @@ class FriendshipsController < ApplicationController
   # DELETE /friendships/1
   def destroy
     @friendship.destroy
+    render json: FriendshipSerializer.new(@friendship)
   end
 
   private
@@ -46,6 +53,6 @@ class FriendshipsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def friendship_params
-      params.require(:friendship).permit(:id, :user_id, :friend_id, :confirmed, :circle)
+      params.require(:friendship).permit(:id, :user_id, :friend_id, :status)
     end
 end

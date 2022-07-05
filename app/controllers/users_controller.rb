@@ -42,6 +42,7 @@ class UsersController < ApplicationController
   # DELETE /users/1
   def destroy
     @user.destroy
+    render json: UserSerializer.new(@user)
   end
 
   private

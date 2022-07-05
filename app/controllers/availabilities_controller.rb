@@ -36,6 +36,7 @@ class AvailabilitiesController < ApplicationController
   # DELETE /availabilities/1
   def destroy
     @availability.destroy
+    render json: AvailabilitySerializer.new(@availability)
   end
 
   private
