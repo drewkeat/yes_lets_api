@@ -27,7 +27,7 @@ class AvailabilitiesController < ApplicationController
   # PATCH/PUT /availabilities/1
   def update
     if @availability.update(availability_params)
-      render json: AvailabilitySerializer.new(@availabilities)
+      render json: AvailabilitySerializer.new(@availability)
     else
       render json: @availability.errors, status: :unprocessable_entity
     end
@@ -47,6 +47,6 @@ class AvailabilitiesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def availability_params
-      params.require(:availability).permit(:start, :end, :user_id)
+      params.require(:availability).permit(:id, :start, :end, :user_id)
     end
 end
