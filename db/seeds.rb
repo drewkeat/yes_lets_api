@@ -33,15 +33,15 @@ u1.confirm_friend(u3)
 def create_availability(user)
   future = (rand.round == 1)
   if future
-    start_day = (Time.now + rand(1..10).days).noon
+    start_day = (Time.now + rand(1..20).days).noon
     later = (rand.round == 1)
-    later ? start_time = start_day + rand(1..5).hours : start_time = start_day - rand(1..5).hours
+    later ? start_time = start_day + rand(1..4).hours : start_time = start_day - rand(1..4).hours
   else 
-    start_day = (Time.now - rand(1..10).days).noon
+    start_day = (Time.now - rand(1..20).days).noon
     later = (rand.round == 1)
-    later ? start_time = start_day + rand(1..5).hours : start_time = start_day - rand(1..5).hours
+    later ? start_time = start_day + rand(1..4).hours : start_time = start_day - rand(1..4).hours
   end
-  end_time = start_time + rand(1..4).hours
+  end_time = start_time + rand(1..3).hours
   user.availabilities.build(start: start_time, end: end_time)
   user.save
 end
@@ -52,10 +52,10 @@ end
 
 def generate_random_hangtime(user)
   availability_user1 = user.possible_hangtimes.map(&:keys).flatten.sample
-  availability_user2 = user.possible_hangtimes.select{|friend_hash| friend_hash.keys.include?(availability_user1)}.sample[availability_user1].sample
-  hangtime = Hangtime.create(Hangtime.match_up(availability_user1, availability_user2))
-  user.hangtimes.push << hangtime
-  Availability.find(availability_user2).user.hangtimes.push << hangtime
+  availability_user2 = !!availability_user1 && user.possible_hangtimes.select{|friend_hash| friend_hash.keys.include?(availability_user1)}.sample[availability_user1].sample
+  !!availability_user1 && !!availability_user2 && hangtime = Hangtime.create(Hangtime.match_up(availability_user1, availability_user2))
+  !!hangtime && user.hangtimes.push << hangtime
+  !!hangtime && Availability.find(availability_user2).user.hangtimes.push << hangtime
 end
 
 User.all.each do |user|

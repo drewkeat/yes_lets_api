@@ -9,5 +9,4 @@ class UserSerializer
   has_many :friendships
   has_many :pending_friendships, serializer: :friendship
   has_many :friendship_invites, serializer: :friendship
-
 end
