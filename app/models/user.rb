@@ -10,6 +10,7 @@ class User < ApplicationRecord
   has_secure_password
   before_save :normalize_attributes
   validates_presence_of :email, on: :create, message: "can't be blank"
+  validates_uniqueness_of :email, on: :create, message: "must be unique"
   scope :findBySubstring, ->(substring) {where("first ILIKE ? OR last ILIKE ?", "%#{substring}%", "%#{substring}%")}
 
   def full_name
